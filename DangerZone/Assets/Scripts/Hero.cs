@@ -10,6 +10,10 @@ public class Hero : MonoBehaviour {
 	private float heroMoveAmt = 0.2f;
 
 	//Shield Attack
+	private Vector3 jumpSpeed = new Vector3(0f, 0.1f, 0f);
+	private float jumpReach = 2;
+	private int jumping = 0;
+
 	private float shieldAttackSpeed = .2f; 
 	private float shieldAttackReach = 5;
 	private int shieldAttacking = 0;
@@ -34,6 +38,15 @@ public class Hero : MonoBehaviour {
 			Move (moveAmt);
 		}
 
+		// Jump
+		if (Input.GetKey(KeyCode.W)) {
+			Jump ();
+		}
+
+		if (jumping != 0) {
+			HandleJump();
+		}
+
 		//Shield
 		if (Input.GetKey (KeyCode.J) && shieldAttacking == 0) {
 			ShieldAttack ();
@@ -48,8 +61,29 @@ public class Hero : MonoBehaviour {
 		HeroCube.transform.localPosition += new Vector3 (dir * heroMoveAmt, 0, 0);
 	}
 
+	void Jump () {
+		jumping = 1;
+	}
+
 	void ShieldAttack () {
 		shieldAttacking = 1;
+	}
+
+	void HandleJump() {
+		if (jumping == 1) {
+			HeroCube.transform.localPosition += jumpSpeed;
+			if (HeroCube.transform.localPosition.y >= jumpReach) {
+				jumping *= -1;
+			}
+		}
+
+		else if (jumping == -1) {
+			HeroCube.transform.localPosition -= jumpSpeed;
+			if (HeroCube.transform.localPosition.y <= 1) {
+				jumping = 0;
+				HeroCube.transform.localPosition = new Vector3 (0, 1, 0);
+			}
+		}
 	}
 
 	void HandleShieldAttack () {
