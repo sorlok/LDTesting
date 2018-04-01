@@ -15,8 +15,10 @@ public class Hero : MonoBehaviour {
 	private int jumping = 0;
 
 	private float shieldAttackSpeed = .2f; 
-	private float shieldAttackReach = 5;
 	private int shieldAttacking = 0;
+	private Vector3 shieldStartPosition = new Vector3 (1, 0, 0);
+	private Vector3 shieldEndPosition = new Vector3 (6, 0, 0);
+	private float shieldWiggle = .2f;
 
 	// Use this for initialization
 	void Start () {
@@ -89,21 +91,27 @@ public class Hero : MonoBehaviour {
 	void HandleShieldAttack () {
 		//HeroShield
 		if (shieldAttacking == 1) {
+			print ("Shield Attacking");
 			//Move
-			HeroShield.transform.localPosition += new Vector3 (shieldAttackSpeed, 0, 0);
+			//HeroShield.transform.localPosition += new Vector3 (shieldAttackSpeed, 0, 0);
+			HeroShield.transform.localPosition = Vector3.Lerp(HeroShield.transform.position, shieldEndPosition,.1f);
 			//Check
-			if (HeroShield.transform.localPosition.x >= shieldAttackReach) {
+			if (HeroShield.transform.localPosition.x >= (shieldEndPosition.x - shieldWiggle)) {
 				shieldAttacking *= -1;
 			}
 		} 
 		else if (shieldAttacking == -1) {
+			print ("Shield Returning");
 			//Move
-			HeroShield.transform.localPosition -= new Vector3(shieldAttackSpeed, 0, 0);
+			//HeroShield.transform.localPosition -= new Vector3(shieldAttackSpeed, 0, 0);
+
 			//Check
-			if (HeroShield.transform.localPosition.x <= (HeroCube.transform.localPosition.x + 1)) {
+			if (HeroShield.transform.localPosition.x <= (shieldStartPosition.x + shieldWiggle)) {
 				shieldAttacking = 0;
 				//Snap
-				HeroShield.transform.localPosition = new Vector3 (1, 0, 0);
+				//HeroShield.transform.localPosition = new Vector3 (1, 0, 0);
+				HeroShield.transform.localPosition = Vector3.Lerp(HeroShield.transform.localPosition, shieldStartPosition,.1f);
+
 			}
 		}
 
