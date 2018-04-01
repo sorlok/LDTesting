@@ -6,6 +6,9 @@ public class Hero : MonoBehaviour {
 	public GameObject HeroCube;
 	public GameObject HeroShield;
 
+	//Movement Tech
+	private float heroMoveAmt = 0.2f;
+
 	//Shield Attack
 	private float shieldAttackSpeed = .2f; 
 	private float shieldAttackReach = 5;
@@ -20,6 +23,16 @@ public class Hero : MonoBehaviour {
 	void FixedUpdate () {
 
 		//Move 
+		int moveAmt = 0;
+		if ((Input.GetKey (KeyCode.A) || Input.GetKey (KeyCode.LeftArrow))) {
+			moveAmt -= 1;
+		}
+		if ((Input.GetKey (KeyCode.D) || Input.GetKey (KeyCode.RightArrow))) {
+			moveAmt += 1;
+		}
+		if (moveAmt != 0) {
+			Move (moveAmt);
+		}
 
 		//Shield
 		if (Input.GetKey (KeyCode.J) && shieldAttacking == 0) {
@@ -30,8 +43,9 @@ public class Hero : MonoBehaviour {
 		}
 	}
 
-	void Move () {
-
+	// dir = (-1, 0, 1) for left/none/right
+	void Move (int dir) {
+		HeroCube.transform.localPosition += new Vector3 (dir * heroMoveAmt, 0, 0);
 	}
 
 	void ShieldAttack () {
